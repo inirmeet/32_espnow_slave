@@ -31,7 +31,6 @@ void setup() {
   {
     Serial.println("OLED initialize failed");
   }  
-  display.display();
   delay(100);
   display.clearDisplay();
   display.display();
@@ -60,35 +59,30 @@ void setup() {
   esp_now_register_recv_cb(OnDataRecv);
 
   //For each gpio on gpios array
-   for(int i=0; i<gpioCount; i++){
-    //We put in read mode
-    pinMode(gpios[i], OUTPUT);
-  }
+//   for(int i=0; i<gpioCount; i++){
+//    //We put in read mode
+//    pinMode(gpios[i], OUTPUT);
+//  }
 }
 
 
   void InitESPNow() {
   //If the initialization was successful
   if (esp_now_init() == ESP_OK) {
-    display.clearDisplay();
-    display.display();
-    display.setCursor(0,0);
-    display.setTextSize(1);             // Normal 1:1 pixel scale
-    display.setTextColor(WHITE);        // Draw white text
     Serial.println("ESPNow Init Success");
-    display.println(F("ESPNow Init Success"));
-  }
+    }
   //If there was an error
   else {
     Serial.println("ESPNow Init Failed");
-    display.println(F("ESPNow Init Failed"));
     ESP.restart();
   }
-  display.display();
 }
 
 //Callback function that tells us when data from Master is received
 void OnDataRecv(const uint8_t *mac_addr, const uint8_t *data, int data_len) {
+  display.clearDisplay();
+  display.print("");
+  display.display();
   dataRec = true;
   char macStr[18];
   //Copies the sender Mac Address to a string
@@ -99,8 +93,7 @@ void OnDataRecv(const uint8_t *mac_addr, const uint8_t *data, int data_len) {
   Serial.println(macStr);
   Serial.println("");
 
-  display.clearDisplay();
-  display.display();
+  
   display.setTextSize(1);             // Normal 1:1 pixel scale
   display.setTextColor(WHITE);        // Draw white text
   display.setCursor(0,0);             // Start at top-left corner
